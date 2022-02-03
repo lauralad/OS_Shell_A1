@@ -37,11 +37,6 @@ int interpreter(char* command_args[], int args_size){
 		if (args_size != 1) return badcommand();
 		return quit();
 
-	} else if (strcmp(command_args[0], "print")==0) {
-		//quit
-		if (args_size != 2) return badcommand();
-		return print(command_args[1]);
-
 	} 
 	else if (strcmp(command_args[0], "set")==0) {
 		//set
@@ -56,15 +51,18 @@ int interpreter(char* command_args[], int args_size){
 			}
 			return set(command_args[1], s);
 		}
-		else return badcommand();
-	
 	} else if(strcmp(command_args[0], "echo")==0) {
 		if (args_size != 2) return badcommand();
 		else{
 			if(command_args[1][0]=='$') {
 				char * s = malloc(2*sizeof(char));
 				strcat(s, &command_args[1][1]);
-				return print(s);
+				//char * output = mem_get_value(s);
+				if (strcmp(mem_get_value(s), "Variable does not exist")==0) {
+					return printf(" \n");
+				} else{
+					return printf("%s\n", mem_get_value(s)); 
+				}
 			} else{
 				char * s = malloc(2*sizeof(char));
 				strcat(s, command_args[1]);
@@ -72,7 +70,12 @@ int interpreter(char* command_args[], int args_size){
 			}
 		}
 		
-	} else if (strcmp(command_args[0], "print")==0) {
+	} else if (strcmp(command_args[0], "my_ls")==0) {
+		if (args_size != 1) return badcommand();
+		return print(command_args[1]);
+	
+	}
+	else if (strcmp(command_args[0], "print")==0) {
 		if (args_size != 2) return badcommand();
 		return print(command_args[1]);
 	

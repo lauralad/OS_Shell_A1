@@ -31,11 +31,12 @@ int main(int argc, char *argv[]) {
 		printf("%c ",prompt);
 		fgets(userInput, MAX_USER_INPUT-1, stdin);
 		
-		errorCode = parseInput(userInput);
+		errorCode = parseInput(userInput); /*Extract words from the user input and call interpreter*/
 		if (errorCode == -1) exit(99);	// ignore all other errors
+		//else if (errorCode !=0) break; /* if the user input doesn't carry out any commands */
 		memset(userInput, 0, sizeof(userInput));
 	}
-
+	
 	return 0;
 
 }
