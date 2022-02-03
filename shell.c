@@ -29,11 +29,15 @@ int main(int argc, char *argv[]) {
 
 	while(1) {							
 		printf("%c ",prompt);
-		fgets(userInput, MAX_USER_INPUT-1, stdin);
+
+		//if the new line read from the stdin file is null, then break out from the while loop
+		if (fgets(userInput, MAX_USER_INPUT-1, stdin) == NULL) {
+			freopen("/dev/tty", "r", stdin);
+			//continue;
+		} 
 		
 		errorCode = parseInput(userInput); /*Extract words from the user input and call interpreter*/
 		if (errorCode == -1) exit(99);	// ignore all other errors
-		//else if (errorCode !=0) break; /* if the user input doesn't carry out any commands */
 		memset(userInput, 0, sizeof(userInput));
 	}
 	
@@ -65,6 +69,7 @@ int parseInput(char ui[]) {
 		if(ui[a] == '\0'){
 			break;
 		}
+
 		a++; 
 	}
 
