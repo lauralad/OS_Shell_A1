@@ -37,7 +37,13 @@ int interpreter(char* command_args[], int args_size){
 		if (args_size != 1) return badcommand();
 		return quit();
 
-	} else if (strcmp(command_args[0], "set")==0) {
+	} else if (strcmp(command_args[0], "print")==0) {
+		//quit
+		if (args_size != 2) return badcommand();
+		return print(command_args[1]);
+
+	} 
+	else if (strcmp(command_args[0], "set")==0) {
 		//set
 		if (args_size<3) return badcommand();
 		else if (args_size==3) return set(command_args[1], command_args[2]);
@@ -133,6 +139,7 @@ int run(char* script){
 	}
 
 	fgets(line,999,p);
+
 	while(1){
 		errCode = parseInput(line);	// which calls interpreter()
 		memset(line, 0, sizeof(line));

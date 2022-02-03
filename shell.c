@@ -30,11 +30,10 @@ int main(int argc, char *argv[]) {
 	while(1) {							
 		printf("%c ",prompt);
 		fgets(userInput, MAX_USER_INPUT-1, stdin);
-
+		
 		errorCode = parseInput(userInput);
 		if (errorCode == -1) exit(99);	// ignore all other errors
 		memset(userInput, 0, sizeof(userInput));
-
 	}
 
 	return 0;
@@ -51,7 +50,7 @@ int parseInput(char ui[]) {
 
 	for(a=0; ui[a]==' ' && a<1000; a++);		// skip white spaces
 
-	while(ui[a] != '\0' && a<1000) {
+	while(ui[a]!= '\0' && a<1000) {
 
 		for(b=0; ui[a]!='\0' && ui[a]!=' ' && a<1000; a++, b++)
 			tmp[b] = ui[a];						// extract a word
@@ -60,11 +59,12 @@ int parseInput(char ui[]) {
 
 		words[w] = strdup(tmp);
 
-		/*if(ui[a]=='\0') {
-			break;
-		}*/
-		a++; 
 		w++;
+		
+		if(ui[a] == '\0'){
+			break;
+		}
+		a++; 
 	}
 
 	return interpreter(words, w);
