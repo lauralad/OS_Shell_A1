@@ -27,18 +27,25 @@ int main(int argc, char *argv[]) {
 	//init shell memory
 	mem_init();
 
-	while(1) {							
-		printf("%c ",prompt);
+	while(1) {			
+		printf("%c ",prompt);	
 
-		//if the new line read from the stdin file is null, then break out from the while loop
+		//if the new line read from the stdin file is null, then we change to interactive mode. 
 		if (fgets(userInput, MAX_USER_INPUT-1, stdin) == NULL) {
+			//redirect to the interactive mode.
 			freopen("/dev/tty", "r", stdin);
-			//continue;
-		} 
-		
-		errorCode = parseInput(userInput); /*Extract words from the user input and call interpreter*/
-		if (errorCode == -1) exit(99);	// ignore all other errors
-		memset(userInput, 0, sizeof(userInput));
+			continue;
+		} else {
+			//break down userInput separated by ";"
+			char* token = strtok(userInput, ";");
+			
+			while(token != NULL) {
+				errorCode = parseInput(token); /*Extract words from the user input and call interpreter*/
+				if (errorCode == -1) exit(99);	// ignore all other errors
+				memset(token, 0, sizeof(*token));
+				token = strtok(NULL, ";");
+			}
+		}
 	}
 	
 	return 0;
@@ -47,7 +54,6 @@ int main(int argc, char *argv[]) {
 
 // Extract words from the input then call interpreter
 int parseInput(char ui[]) {
- 
 	char tmp[200];
 	char *words[100];							
 	int a,b;							
