@@ -5,7 +5,7 @@
 #include "shellmemory.h"
 #include "shell.h"
 
-int MAX_ARGS_SIZE = 7;
+int MAX_ARGS_SIZE = 6;
 
 int help();
 int quit();
@@ -19,9 +19,9 @@ int badcommandFileDoesNotExist();
 int interpreter(char* command_args[], int args_size){
 	int i;
 
-	/*if ( args_size < 1 || args_size > MAX_ARGS_SIZE){
+	if ( args_size < 1 || args_size > MAX_ARGS_SIZE){
 		return badcommand();
-	}*/
+	}
 
 	for ( i=0; i<args_size; i++){ //strip spaces new line etc
 		command_args[i][strcspn(command_args[i], "\r\n")] = 0;
@@ -36,7 +36,9 @@ int interpreter(char* command_args[], int args_size){
 		//quit
 		if (args_size != 1) return badcommand();
 		return quit();
-	} else if (strcmp(command_args[0], "my_ls")==0) {
+
+	} 
+	else if (strcmp(command_args[0], "my_ls")==0) {
 		if (args_size != 1) return badcommand();
 		system("ls -1");
 		return 0;
@@ -44,13 +46,11 @@ int interpreter(char* command_args[], int args_size){
 	} 
 	else if (strcmp(command_args[0], "set")==0) {
 		//set
-		if (args_size<3) return printf("Too little arguments");
+		if (args_size<3) return badcommand();
 		else if (args_size==3) return set(command_args[1], command_args[2]);
-		else if (args_size > 7) return printf("Bad command: Too many tokens\n");
-		else {
-			char * s = malloc (100* args_size *sizeof(char));
+		else if (3<args_size) {
+			char * s = malloc (100 * args_size *sizeof(char));
 		
-			//starting from the 2nd command arg, we concat them tgt separated by space
 			for(int i=2; i < args_size; i++) {
 				strcat(s, command_args[i]);
 				strcat(s, " ");
@@ -65,21 +65,27 @@ int interpreter(char* command_args[], int args_size){
 				strcat(s, &command_args[1][1]);
 
 				if (strcmp(mem_get_value(s), "Variable does not exist")==0) {
-					return printf(" \n");
+					printf("\n");
+					free(s);
+					return 0;
 				} else{
-					return printf("%s\n", mem_get_value(s)); 
+					printf("%s\n", mem_get_value(s));
+					free(s); 
+					return 0;
 				}
 			} else{
-				char * s = malloc(100*sizeof(char));
-				strcat(s, command_args[1]);
-				return printf("%s\n", s);
+				char * b = malloc(100*sizeof(char));
+				strcat(b, command_args[1]);
+				printf("%s\n", b);
+				free(b);
+				return 0;
 			}
 		}
 		
 	} else if (strcmp(command_args[0], "my_ls")==0) {
 		if (args_size != 1) return badcommand();
-		return print(command_args[1]);
-	
+		system("ls -1");
+		return 0;
 	}
 	else if (strcmp(command_args[0], "print")==0) {
 		if (args_size != 2) return badcommand();
