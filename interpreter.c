@@ -36,6 +36,11 @@ int interpreter(char* command_args[], int args_size){
 		//quit
 		if (args_size != 1) return badcommand();
 		return quit();
+	} else if (strcmp(command_args[0], "my_ls")==0) {
+		if (args_size != 1) return badcommand();
+		system("ls -1");
+		return 0;
+
 	} 
 	else if (strcmp(command_args[0], "set")==0) {
 		//set
