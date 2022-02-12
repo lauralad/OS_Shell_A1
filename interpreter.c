@@ -5,7 +5,7 @@
 #include "shellmemory.h"
 #include "shell.h"
 
-int MAX_ARGS_SIZE = 6;
+int MAX_ARGS_SIZE = 7;
 
 int help();
 int quit();
